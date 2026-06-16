@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://aicoach-z4ca.onrender.com"
+    baseURL: "https://aicoach-backend-3odu.onrender.com"
 });
 
 api.interceptors.request.use((config) => {
