@@ -19,7 +19,7 @@ export default function Register() {
     name: "", age: "", gender: "male",
     weight: "", height: "",
     goal_weight: "", goal_loss: "",
-    specialty: "", email: "", password: ""
+    specialty: ""
   });
   const [loading, setLoading] = useState(false);
 
@@ -36,14 +36,9 @@ export default function Register() {
           weight: Number(form.weight),
           height: Number(form.height),
           goal_weight: Number(form.goal_weight),
-          goal_loss: Number(form.goal_loss),
-          email: form.email,
-          password: form.password
+          goal_loss: Number(form.goal_loss)
         });
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify({
-          user_id: res.data.user_id, role: res.data.role, name: form.name
-        }));
+        alert(`Tạo tài khoản thành công! ID = ${res.data.user_id}`);
         navigate("/");
       } else {
         const res = await api.post("/trainers", {
@@ -52,14 +47,9 @@ export default function Register() {
           gender: form.gender,
           weight: Number(form.weight),
           height: Number(form.height),
-          specialty: form.specialty,
-          email: form.email,
-          password: form.password
+          specialty: form.specialty
         });
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify({
-          user_id: res.data.trainer_id, role: res.data.role, name: form.name
-        }));
+        alert(`Tạo tài khoản huấn luyện viên thành công! ID = ${res.data.trainer_id}`);
         navigate("/");
       }
     } catch (err) {
@@ -138,16 +128,6 @@ export default function Register() {
             </div>
           </div>
 
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Email</span>
-            <input name="email" type="email" style={inputStyle} placeholder="ban@email.com" onChange={handleChange} />
-          </div>
-
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Mật khẩu</span>
-            <input name="password" type="password" style={inputStyle} placeholder="••••••••" onChange={handleChange} />
-          </div>
-
           {role === "user" && (
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
               <div>
@@ -179,8 +159,8 @@ export default function Register() {
 
           <p style={{ textAlign: "center", fontSize: "13px", color: "#6b7280", margin: "12px 0 0" }}>
             Đã có tài khoản?{" "}
-            <span onClick={() => navigate("/login")} style={{ color: "#534AB7", cursor: "pointer" }}>
-              Đăng nhập
+            <span onClick={() => navigate("/")} style={{ color: "#534AB7", cursor: "pointer" }}>
+              Về trang chính
             </span>
           </p>
         </div>

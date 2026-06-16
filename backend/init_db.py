@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS users(
     weight REAL,
     height REAL,
     goal_weight REAL,
-    goal_loss REAL
+    goal_loss REAL,
+    email TEXT UNIQUE,
+    password_hash TEXT
 )
 """)
 
@@ -59,6 +61,8 @@ CREATE TABLE IF NOT EXISTS trainers (
     weight REAL,
     height REAL,
     specialty TEXT,
+    email TEXT UNIQUE,
+    password_hash TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)

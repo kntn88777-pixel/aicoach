@@ -1,6 +1,8 @@
 fastapi
 uvicorn
-pydantic
+pydantic[email]
 groq
 python-dotenv
 google-genai
+bcrypt
+pyjwt

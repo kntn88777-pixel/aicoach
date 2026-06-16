@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const navItems = [
   { to: "/", icon: "ti-layout-dashboard", label: "Dashboard" },
@@ -8,13 +8,6 @@ const navItems = [
 
 function Sidebar() {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
-  };
 
   return (
     <div style={{
@@ -49,17 +42,6 @@ function Sidebar() {
           </Link>
         );
       })}
-
-      <div
-        onClick={handleLogout}
-        style={{
-          marginTop: "auto", borderRadius: "8px", padding: "10px 12px",
-          display: "flex", alignItems: "center", gap: "10px", cursor: "pointer"
-        }}
-      >
-        <i className="ti ti-logout" style={{ fontSize: "16px", color: "#E24B4A" }} />
-        <span style={{ fontSize: "14px", color: "#E24B4A" }}>Đăng xuất</span>
-      </div>
     </div>
   );
 }

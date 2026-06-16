@@ -9,9 +9,7 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("user") || "{}");
-    const userId = stored.user_id || 1;
-    api.get(`/dashboard/${userId}`)
+    api.get("/dashboard/1")
       .then(res => setData(res.data))
       .catch(() => setError("Không load được dữ liệu API"))
       .finally(() => setLoading(false));
