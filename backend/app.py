@@ -9,14 +9,14 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://aicoachhealth.onrender.com"
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# =========================
-# MODELS
-# =========================
 class UserCreate(BaseModel):
     name: str
     age: int
@@ -39,18 +39,12 @@ class TrainerCreate(BaseModel):
     height: float
     specialty: str
 
-# =========================
-# FIX SQLITE ROW -> DICT
-# =========================
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
         d[col[0]] = row[idx]
     return d
 
-# =========================
-# CREATE USER
-# =========================
 @app.post("/users")
 def create_user(user: UserCreate):
     conn = get_connection()
@@ -64,9 +58,6 @@ def create_user(user: UserCreate):
     conn.close()
     return {"message": "created", "user_id": user_id}
 
-# =========================
-# TRAINER
-# =========================
 @app.post("/trainers")
 def create_trainer(trainer: TrainerCreate):
     conn = get_connection()
@@ -74,15 +65,12 @@ def create_trainer(trainer: TrainerCreate):
     cursor.execute("""
         INSERT INTO trainers (name, age, gender, weight, height, specialty)
         VALUES (?, ?, ?, ?, ?, ?)
-    """, (trainer.name, trainer.age, trainer.gender, trainer.weight, trainer.height, trainer.specialty))
+    """, (trainer.name, trainer.age, trainer.gender, trainer.width, trainer.height, trainer.specialty))
     conn.commit()
     trainer_id = cursor.lastrowid
     conn.close()
     return {"message": "created", "trainer_id": trainer_id}
 
-# =========================
-# FOOD LOG
-# =========================
 @app.post("/food-log")
 def add_food(data: FoodRequest):
     food_name = data.food.lower()
@@ -103,9 +91,6 @@ def add_food(data: FoodRequest):
     conn.close()
     return {"food": food_name, "calories": round(calories, 2), "protein": round(protein, 2)}
 
-# =========================
-# DASHBOARD
-# =========================
 @app.get("/dashboard/{user_id}")
 def dashboard(user_id: int):
     conn = get_connection()
@@ -136,7 +121,4 @@ def dashboard(user_id: int):
         "remaining": round(recommended - consumed)
     }
 
-# =========================
-# CHAT ROUTER
-# =========================
 app.include_router(chat_router)
