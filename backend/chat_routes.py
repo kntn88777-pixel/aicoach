@@ -2,8 +2,11 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from database import get_connection
 from groq import Groq
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-client = Groq(api_key="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")
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 router = APIRouter()
 
