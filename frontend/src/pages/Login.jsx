@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Mascot from "../components/Mascot";
 import "../mekong-theme.css";
 
 export default function Login() {
@@ -36,8 +37,8 @@ export default function Login() {
       <div className="mk-card-wrap">
 
         <div className="mk-brand">
-          <div className="mk-brand-mark">
-            <i className="ti ti-leaf" />
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "4px" }}>
+            <Mascot size={88} />
           </div>
           <p className="mk-title">AI Coach Health</p>
           <p className="mk-subtitle">Sống khỏe · Tập chất · Miền Tây thiệt!</p>

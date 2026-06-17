@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import Sidebar from "../components/Sidebar";
-import StatCard from "../components/StatCard";
+import "../mekong-theme.css";
+
+const stats = [
+  { key: "weight", label: "Cân nặng", icon: "ti-scale", unit: "kg" },
+  { key: "goal_weight", label: "Mục tiêu", icon: "ti-target", unit: "kg" },
+  { key: "tdee", label: "TDEE", icon: "ti-flame", unit: "kcal" },
+  { key: "recommended", label: "Được ăn", icon: "ti-check", unit: "kcal" },
+  { key: "consumed", label: "Đã ăn", icon: "ti-bowl-chopsticks", unit: "kcal" },
+  { key: "remaining", label: "Còn lại", icon: "ti-coin", unit: "kcal", highlight: true },
+];
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -13,50 +22,53 @@ export default function Dashboard() {
     const userId = stored.user_id || 1;
     api.get(`/dashboard/${userId}`)
       .then(res => setData(res.data))
-      .catch(() => setError("Không load được dữ liệu API"))
+      .catch(() => setError("Không load được dữ liệu, thử tải lại trang nhé"))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
-      <span style={{ color: "#6b7280", fontSize: "14px" }}>Đang tải...</span>
+    <div className="mk-page" style={{ minHeight: "100vh" }}>
+      <span style={{ color: "#6B6A5C", fontSize: "14px" }}>Đang tải...</span>
     </div>
   );
 
   if (error) return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh" }}>
-      <span style={{ color: "#E24B4A", fontSize: "14px" }}>{error}</span>
+    <div className="mk-page" style={{ minHeight: "100vh" }}>
+      <span style={{ color: "#B33A2E", fontSize: "14px" }}>{error}</span>
     </div>
   );
 
   const percent = Math.min(100, Math.round((data.consumed / data.recommended) * 100));
 
   return (
-    <div style={{ display: "flex", background: "#f9fafb", minHeight: "100vh" }}>
+    <div style={{ display: "flex", background: "var(--mk-cream)", minHeight: "100vh" }}>
       <Sidebar />
-      <div style={{ marginLeft: "220px", padding: "2rem", flex: 1 }}>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <h1 style={{ fontSize: "20px", fontWeight: 500, margin: "0 0 4px" }}>Dashboard</h1>
-          <p style={{ fontSize: "13px", color: "#6b7280", margin: 0 }}>Theo dõi sức khỏe hôm nay</p>
+      <div className="mk-page-body">
+        <div style={{ marginBottom: "1.75rem" }}>
+          <h1 className="mk-page-title">Dashboard</h1>
+          <p className="mk-page-sub">Theo dõi sức khỏe hôm nay</p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px", marginBottom: "1.5rem" }}>
-          <StatCard title="Cân nặng" value={`${data.weight} kg`} />
-          <StatCard title="Mục tiêu" value={`${data.goal_weight} kg`} />
-          <StatCard title="TDEE" value={`${data.tdee} kcal`} />
-          <StatCard title="Được ăn" value={`${data.recommended} kcal`} />
-          <StatCard title="Đã ăn" value={`${data.consumed} kcal`} />
-          <StatCard title="Còn lại" value={`${data.remaining} kcal`} />
+        <div className="mk-stat-grid">
+          {stats.map(({ key, label, icon, unit, highlight }) => (
+            <div key={key} className={`mk-stat-card ${highlight ? "highlight" : ""}`}>
+              <div className="mk-stat-icon-row">
+                <i className={`ti ${icon}`} />
+                <span className="mk-stat-label">{label}</span>
+              </div>
+              <p className="mk-stat-value">{data[key]} {unit}</p>
+            </div>
+          ))}
         </div>
 
-        <div style={{ background: "#fff", borderRadius: "12px", border: "1px solid #e5e7eb", padding: "1rem 1.25rem" }}>
-          <p style={{ fontSize: "13px", fontWeight: 500, margin: "0 0 10px" }}>Tiến độ calo hôm nay</p>
-          <div style={{ background: "#f3f4f6", borderRadius: "99px", height: "8px", overflow: "hidden" }}>
-            <div style={{ width: `${percent}%`, height: "100%", background: "#534AB7", borderRadius: "99px", transition: "width 0.5s ease" }} />
+        <div className="mk-progress-card">
+          <p className="mk-section-label">Tiến độ calo hôm nay</p>
+          <div className="mk-progress-track">
+            <div className="mk-progress-fill" style={{ width: `${percent}%` }} />
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: "6px" }}>
-            <span style={{ fontSize: "12px", color: "#6b7280" }}>{data.consumed} kcal đã ăn</span>
-            <span style={{ fontSize: "12px", color: "#6b7280" }}>{data.recommended} kcal mục tiêu</span>
+          <div className="mk-progress-labels">
+            <span>{data.consumed} kcal đã ăn</span>
+            <span>{data.recommended} kcal mục tiêu</span>
           </div>
         </div>
       </div>
