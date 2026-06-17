@@ -1,7 +1,5 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-import traceback
 from pydantic import BaseModel, EmailStr
 from database import get_connection
 from food_data import food_db
@@ -9,14 +7,6 @@ from chat_routes import router as chat_router
 from auth import hash_password, verify_password, create_token, get_current_user
 
 app = FastAPI()
-
-@app.exception_handler(Exception)
-async def debug_exception_handler(request: Request, exc: Exception):
-    return JSONResponse(
-        status_code=500,
-        content={"error": str(exc), "traceback": traceback.format_exc()},
-        headers={"Access-Control-Allow-Origin": "https://aicoachhealth.onrender.com"}
-    )
 
 app.add_middleware(
     CORSMiddleware,
