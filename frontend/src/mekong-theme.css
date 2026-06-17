@@ -1,0 +1,265 @@
+/* AI Coach Health — bảng màu "miền Tây sông nước" */
+
+:root {
+  --mk-cream: #F7F3E8;
+  --mk-cream-card: #FFFDF7;
+  --mk-forest: #1F4D2E;
+  --mk-forest-dark: #143620;
+  --mk-leaf: #4A8B3F;
+  --mk-leaf-light: #E8F0E2;
+  --mk-clay: #8B6914;
+  --mk-clay-light: #F0E4C8;
+  --mk-text: #2A2A22;
+  --mk-text-muted: #6B6A5C;
+  --mk-border: #E4DCC8;
+  --mk-error: #B33A2E;
+  --mk-error-bg: #FBEAE6;
+}
+
+.mk-page {
+  min-height: 100vh;
+  background: var(--mk-cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.mk-checker-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--mk-forest) 0, var(--mk-forest) 10px,
+    var(--mk-clay) 10px, var(--mk-clay) 20px
+  );
+  opacity: 0.85;
+}
+
+.mk-card-wrap {
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+}
+
+.mk-brand {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.mk-brand-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--mk-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  position: relative;
+}
+
+.mk-brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1.5px dashed var(--mk-clay);
+  border-radius: 18px;
+  opacity: 0.6;
+}
+
+.mk-brand-mark i {
+  font-size: 26px;
+  color: var(--mk-cream);
+}
+
+.mk-title {
+  font-family: "Fraunces", serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--mk-forest);
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+
+.mk-subtitle {
+  font-size: 13px;
+  color: var(--mk-text-muted);
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.mk-card {
+  background: var(--mk-cream-card);
+  border: 1px solid var(--mk-border);
+  border-radius: 18px;
+  padding: 2rem 1.75rem;
+  position: relative;
+}
+
+.mk-card::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  background-image:
+    linear-gradient(45deg, var(--mk-clay) 25%, transparent 25%, transparent 75%, var(--mk-clay) 75%),
+    linear-gradient(45deg, var(--mk-clay) 25%, transparent 25%, transparent 75%, var(--mk-clay) 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+  opacity: 0.35;
+}
+
+.mk-error {
+  background: var(--mk-error-bg);
+  color: var(--mk-error);
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  border-left: 3px solid var(--mk-error);
+}
+
+.mk-field {
+  margin-bottom: 14px;
+}
+
+.mk-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mk-forest);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.2px;
+}
+
+.mk-input, .mk-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1.5px solid var(--mk-border);
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  background: #fff;
+  color: var(--mk-text);
+  font-family: "Inter", sans-serif;
+  transition: border-color 0.15s ease;
+}
+
+.mk-input:focus, .mk-select:focus {
+  border-color: var(--mk-leaf);
+}
+
+.mk-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mk-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--mk-forest);
+  color: var(--mk-cream);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  margin-top: 6px;
+  letter-spacing: 0.2px;
+  transition: background 0.15s ease;
+}
+
+.mk-btn:hover:not(:disabled) {
+  background: var(--mk-forest-dark);
+}
+
+.mk-btn:disabled {
+  background: #BFC2B5;
+  cursor: not-allowed;
+}
+
+.mk-footer-text {
+  text-align: center;
+  font-size: 13px;
+  color: var(--mk-text-muted);
+  margin: 16px 0 0;
+}
+
+.mk-link {
+  color: var(--mk-leaf);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mk-link:hover {
+  color: var(--mk-forest);
+}
+
+.mk-role-grid {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.mk-role-card {
+  flex: 1;
+  padding: 16px 10px;
+  text-align: center;
+  cursor: pointer;
+  border: 1.5px solid var(--mk-border);
+  border-radius: 12px;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+
+.mk-role-card.active {
+  border-color: var(--mk-leaf);
+  background: var(--mk-leaf-light);
+}
+
+.mk-role-card i {
+  font-size: 22px;
+  display: block;
+  margin-bottom: 6px;
+  color: var(--mk-text-muted);
+}
+
+.mk-role-card.active i {
+  color: var(--mk-forest);
+}
+
+.mk-role-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 2px;
+  color: var(--mk-text);
+}
+
+.mk-role-card.active .mk-role-title {
+  color: var(--mk-forest);
+}
+
+.mk-role-sub {
+  font-size: 11px;
+  margin: 0;
+  color: var(--mk-text-muted);
+}
+
+.mk-section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mk-forest);
+  margin: 0 0 10px;
+}

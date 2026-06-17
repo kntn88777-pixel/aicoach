@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-
-const inputStyle = {
-  width: "100%", boxSizing: "border-box", padding: "8px 12px",
-  border: "1px solid #e5e7eb", borderRadius: "8px", fontSize: "14px",
-  outline: "none", background: "#fff", color: "#111"
-};
-
-const labelStyle = {
-  fontSize: "12px", color: "#6b7280", marginBottom: "5px", display: "block"
-};
+import "../mekong-theme.css";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -33,63 +24,55 @@ export default function Login() {
       }));
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.detail || "Đăng nhập thất bại");
+      setError(err.response?.data?.detail || "Email hoặc mật khẩu chưa đúng, thử lại nhé");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-      <div style={{ width: "100%", maxWidth: "420px" }}>
+    <div className="mk-page">
+      <div className="mk-checker-strip" />
+      <div className="mk-card-wrap">
 
-        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-          <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "#EEEDFE", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 10px" }}>
-            <i className="ti ti-barbell" style={{ fontSize: "20px", color: "#534AB7" }} />
+        <div className="mk-brand">
+          <div className="mk-brand-mark">
+            <i className="ti ti-leaf" />
           </div>
-          <p style={{ fontSize: "20px", fontWeight: 500, margin: "0 0 4px" }}>Đăng nhập</p>
-          <p style={{ fontSize: "13px", color: "#6b7280", margin: 0 }}>AI Weight Coach</p>
+          <p className="mk-title">AI Coach Health</p>
+          <p className="mk-subtitle">Sống khỏe · Tập chất · Miền Tây thiệt!</p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "16px", padding: "1.5rem" }}>
+        <form onSubmit={handleSubmit} className="mk-card">
 
-          {error && (
-            <div style={{ background: "#FEEEEE", color: "#E24B4A", fontSize: "13px", padding: "10px 12px", borderRadius: "8px", marginBottom: "12px" }}>
-              {error}
-            </div>
-          )}
+          {error && <div className="mk-error">{error}</div>}
 
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Email</span>
+          <div className="mk-field">
+            <span className="mk-label">Email</span>
             <input
-              type="email" required style={inputStyle}
+              type="email" required className="mk-input"
               placeholder="ban@email.com" value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div style={{ marginBottom: "16px" }}>
-            <span style={labelStyle}>Mật khẩu</span>
+          <div className="mk-field">
+            <span className="mk-label">Mật khẩu</span>
             <input
-              type="password" required style={inputStyle}
+              type="password" required className="mk-input"
               placeholder="••••••••" value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
-          <button type="submit" disabled={loading} style={{
-            width: "100%", padding: "10px", borderRadius: "8px", border: "none",
-            background: loading ? "#AFA9EC" : "#534AB7",
-            color: "#fff", fontSize: "14px", fontWeight: 500,
-            cursor: loading ? "not-allowed" : "pointer", marginTop: "4px"
-          }}>
+          <button type="submit" disabled={loading} className="mk-btn">
             {loading ? "Đang đăng nhập..." : "Đăng nhập"}
           </button>
 
-          <p style={{ textAlign: "center", fontSize: "13px", color: "#6b7280", margin: "12px 0 0" }}>
+          <p className="mk-footer-text">
             Chưa có tài khoản?{" "}
-            <span onClick={() => navigate("/register")} style={{ color: "#534AB7", cursor: "pointer" }}>
-              Đăng ký ngay
+            <span onClick={() => navigate("/register")} className="mk-link">
+              Tạo tài khoản ngay
             </span>
           </p>
         </form>

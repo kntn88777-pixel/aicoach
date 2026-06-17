@@ -1,16 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
-
-const inputStyle = {
-  width: "100%", boxSizing: "border-box", padding: "8px 12px",
-  border: "1px solid #e5e7eb", borderRadius: "8px", fontSize: "14px",
-  outline: "none", background: "#fff", color: "#111"
-};
-
-const labelStyle = {
-  fontSize: "12px", color: "#6b7280", marginBottom: "5px", display: "block"
-};
+import "../mekong-theme.css";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -22,10 +13,13 @@ export default function Register() {
     specialty: "", email: "", password: ""
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
     setLoading(true);
     try {
       if (role === "user") {
@@ -63,127 +57,120 @@ export default function Register() {
         navigate("/");
       }
     } catch (err) {
-      alert("Lỗi tạo tài khoản: " + (err.response?.data?.detail || err.message));
+      setError(err.response?.data?.detail || "Có lỗi xảy ra, kiểm tra lại thông tin nhé");
     } finally {
       setLoading(false);
     }
   };
 
-  const roleCard = (value, icon, title, sub) => (
-    <div onClick={() => setRole(value)} style={{
-      flex: 1, padding: "14px", textAlign: "center", cursor: "pointer",
-      border: `1.5px solid ${role === value ? "#534AB7" : "#e5e7eb"}`,
-      borderRadius: "12px",
-      background: role === value ? "#EEEDFE" : "#fff",
-      transition: "all 0.15s"
-    }}>
-      <i className={`ti ${icon}`} style={{
-        fontSize: "20px", color: role === value ? "#534AB7" : "#9ca3af",
-        display: "block", marginBottom: "6px"
-      }} />
-      <p style={{ fontSize: "13px", fontWeight: 500, margin: "0 0 2px",
-        color: role === value ? "#3C3489" : "#111" }}>{title}</p>
-      <p style={{ fontSize: "11px", margin: 0,
-        color: role === value ? "#534AB7" : "#9ca3af" }}>{sub}</p>
-    </div>
-  );
-
   return (
-    <div style={{ minHeight: "100vh", background: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
-      <div style={{ width: "100%", maxWidth: "480px" }}>
+    <div className="mk-page">
+      <div className="mk-checker-strip" />
+      <div className="mk-card-wrap" style={{ maxWidth: "480px" }}>
 
-        <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
-          <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "#EEEDFE", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 10px" }}>
-            <i className="ti ti-barbell" style={{ fontSize: "20px", color: "#534AB7" }} />
+        <div className="mk-brand">
+          <div className="mk-brand-mark">
+            <i className="ti ti-leaf" />
           </div>
-          <p style={{ fontSize: "20px", fontWeight: 500, margin: "0 0 4px" }}>Tạo tài khoản</p>
-          <p style={{ fontSize: "13px", color: "#6b7280", margin: 0 }}>AI Weight Coach</p>
+          <p className="mk-title">Tạo tài khoản</p>
+          <p className="mk-subtitle">AI Coach Health</p>
         </div>
 
-        <div style={{ background: "#fff", border: "1px solid #e5e7eb", borderRadius: "16px", padding: "1.5rem" }}>
+        <form onSubmit={handleSubmit} className="mk-card">
 
-          <p style={{ fontSize: "13px", fontWeight: 500, margin: "0 0 8px" }}>Loại tài khoản</p>
-          <div style={{ display: "flex", gap: "10px", marginBottom: "1.25rem" }}>
-            {roleCard("user", "ti-user", "Người dùng", "Theo dõi sức khỏe")}
-            {roleCard("trainer", "ti-trophy", "Quản lí tập luyện", "Huấn luyện viên")}
+          {error && <div className="mk-error">{error}</div>}
+
+          <p className="mk-section-label">Bạn là</p>
+          <div className="mk-role-grid">
+            <div
+              className={`mk-role-card ${role === "user" ? "active" : ""}`}
+              onClick={() => setRole("user")}
+            >
+              <i className="ti ti-user" />
+              <p className="mk-role-title">Người dùng</p>
+              <p className="mk-role-sub">Theo dõi sức khỏe</p>
+            </div>
+            <div
+              className={`mk-role-card ${role === "trainer" ? "active" : ""}`}
+              onClick={() => setRole("trainer")}
+            >
+              <i className="ti ti-trophy" />
+              <p className="mk-role-title">Huấn luyện viên</p>
+              <p className="mk-role-sub">Quản lí tập luyện</p>
+            </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+          <div className="mk-row mk-field">
             <div>
-              <span style={labelStyle}>Họ và tên</span>
-              <input name="name" style={inputStyle} placeholder="Nguyễn Văn A" onChange={handleChange} />
+              <span className="mk-label">Họ và tên</span>
+              <input name="name" className="mk-input" placeholder="Nguyễn Văn A" onChange={handleChange} />
             </div>
             <div>
-              <span style={labelStyle}>Tuổi</span>
-              <input name="age" type="number" style={inputStyle} placeholder="25" onChange={handleChange} />
+              <span className="mk-label">Tuổi</span>
+              <input name="age" type="number" className="mk-input" placeholder="25" onChange={handleChange} />
             </div>
           </div>
 
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Giới tính</span>
-            <select name="gender" style={inputStyle} onChange={handleChange}>
+          <div className="mk-field">
+            <span className="mk-label">Giới tính</span>
+            <select name="gender" className="mk-select" onChange={handleChange}>
               <option value="male">Nam</option>
               <option value="female">Nữ</option>
             </select>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+          <div className="mk-row mk-field">
             <div>
-              <span style={labelStyle}>Cân nặng (kg)</span>
-              <input name="weight" type="number" style={inputStyle} placeholder="70" onChange={handleChange} />
+              <span className="mk-label">Cân nặng (kg)</span>
+              <input name="weight" type="number" className="mk-input" placeholder="70" onChange={handleChange} />
             </div>
             <div>
-              <span style={labelStyle}>Chiều cao (cm)</span>
-              <input name="height" type="number" style={inputStyle} placeholder="170" onChange={handleChange} />
+              <span className="mk-label">Chiều cao (cm)</span>
+              <input name="height" type="number" className="mk-input" placeholder="170" onChange={handleChange} />
             </div>
           </div>
 
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Email</span>
-            <input name="email" type="email" style={inputStyle} placeholder="ban@email.com" onChange={handleChange} />
+          <div className="mk-field">
+            <span className="mk-label">Email</span>
+            <input name="email" type="email" className="mk-input" placeholder="ban@email.com" onChange={handleChange} />
           </div>
 
-          <div style={{ marginBottom: "12px" }}>
-            <span style={labelStyle}>Mật khẩu</span>
-            <input name="password" type="password" style={inputStyle} placeholder="••••••••" onChange={handleChange} />
+          <div className="mk-field">
+            <span className="mk-label">Mật khẩu</span>
+            <input name="password" type="password" className="mk-input" placeholder="••••••••" onChange={handleChange} />
           </div>
 
           {role === "user" && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "12px" }}>
+            <div className="mk-row mk-field">
               <div>
-                <span style={labelStyle}>Mục tiêu cân (kg)</span>
-                <input name="goal_weight" type="number" style={inputStyle} placeholder="65" onChange={handleChange} />
+                <span className="mk-label">Mục tiêu cân (kg)</span>
+                <input name="goal_weight" type="number" className="mk-input" placeholder="65" onChange={handleChange} />
               </div>
               <div>
-                <span style={labelStyle}>Giảm/tuần (kg)</span>
-                <input name="goal_loss" type="number" step="0.1" style={inputStyle} placeholder="0.5" onChange={handleChange} />
+                <span className="mk-label">Giảm/tuần (kg)</span>
+                <input name="goal_loss" type="number" step="0.1" className="mk-input" placeholder="0.5" onChange={handleChange} />
               </div>
             </div>
           )}
 
           {role === "trainer" && (
-            <div style={{ marginBottom: "12px" }}>
-              <span style={labelStyle}>Chứng chỉ / chuyên môn</span>
-              <input name="specialty" style={inputStyle} placeholder="VD: PT cấp 3, Yoga, CrossFit..." onChange={handleChange} />
+            <div className="mk-field">
+              <span className="mk-label">Chứng chỉ / chuyên môn</span>
+              <input name="specialty" className="mk-input" placeholder="VD: PT cấp 3, Yoga, CrossFit..." onChange={handleChange} />
             </div>
           )}
 
-          <button onClick={handleSubmit} disabled={loading} style={{
-            width: "100%", padding: "10px", borderRadius: "8px", border: "none",
-            background: loading ? "#AFA9EC" : "#534AB7",
-            color: "#fff", fontSize: "14px", fontWeight: 500,
-            cursor: loading ? "not-allowed" : "pointer", marginTop: "4px"
-          }}>
+          <button type="submit" disabled={loading} className="mk-btn">
             {loading ? "Đang tạo..." : "Tạo tài khoản"}
           </button>
 
-          <p style={{ textAlign: "center", fontSize: "13px", color: "#6b7280", margin: "12px 0 0" }}>
+          <p className="mk-footer-text">
             Đã có tài khoản?{" "}
-            <span onClick={() => navigate("/login")} style={{ color: "#534AB7", cursor: "pointer" }}>
+            <span onClick={() => navigate("/login")} className="mk-link">
               Đăng nhập
             </span>
           </p>
-        </div>
+        </form>
       </div>
     </div>
   );
