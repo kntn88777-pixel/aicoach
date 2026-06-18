@@ -3,14 +3,16 @@ import Mascot from "./Mascot";
 import "../mekong-theme.css";
 
 const navItems = [
-  { to: "/", icon: "ti-layout-dashboard", label: "Dashboard" },
-  { to: "/chat", icon: "ti-message-circle", label: "Chat" },
-  { to: "/weight", icon: "ti-chart-line", label: "Cân nặng" },
+  { to: "/", icon: "ti-layout-dashboard", label: "Dashboard", roles: ["user", "trainer"] },
+  { to: "/chat", icon: "ti-message-circle", label: "Chat", roles: ["user", "trainer"] },
+  { to: "/weight", icon: "ti-chart-line", label: "Cân nặng", roles: ["user"] },
 ];
 
 function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const stored = JSON.parse(localStorage.getItem("user") || "{}");
+  const role = stored.role || "user";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -25,7 +27,7 @@ function Sidebar() {
         <span className="mk-sidebar-brand-name">AI Coach<br />Health</span>
       </div>
 
-      {navItems.map(({ to, icon, label }) => {
+      {navItems.filter(item => item.roles.includes(role)).map(({ to, icon, label }) => {
         const active = location.pathname === to;
         return (
           <Link key={to} to={to} style={{ textDecoration: "none" }}>

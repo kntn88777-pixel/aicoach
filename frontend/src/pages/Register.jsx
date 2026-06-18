@@ -53,7 +53,7 @@ export default function Register() {
         });
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("user", JSON.stringify({
-          user_id: res.data.trainer_id, role: res.data.role, name: form.name
+          user_id: res.data.trainer_id, role: res.data.role, name: form.name, specialty: form.specialty
         }));
         navigate("/");
       }

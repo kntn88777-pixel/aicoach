@@ -112,7 +112,7 @@ def login(data: LoginRequest):
     if trainer and verify_password(data.password, trainer["password_hash"]):
         conn.close()
         token = create_token(trainer["id"], "trainer")
-        return {"token": token, "role": "trainer", "user_id": trainer["id"], "name": trainer["name"]}
+        return {"token": token, "role": "trainer", "user_id": trainer["id"], "name": trainer["name"], "specialty": trainer["specialty"]}
 
     conn.close()
     raise HTTPException(status_code=401, detail="Email hoặc mật khẩu không đúng")

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import api from "../services/api";
 import Sidebar from "../components/Sidebar";
 import "../mekong-theme.css";
@@ -63,15 +64,15 @@ function WeightChart({ logs, goalWeight }) {
 }
 
 export default function Weight() {
+  const stored = JSON.parse(localStorage.getItem("user") || "{}");
+  const userId = stored.user_id || 1;
+
   const [logs, setLogs] = useState([]);
   const [goalWeight, setGoalWeight] = useState(null);
   const [newWeight, setNewWeight] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-
-  const stored = JSON.parse(localStorage.getItem("user") || "{}");
-  const userId = stored.user_id || 1;
 
   const loadLogs = () => {
     api.get(`/weight-log/${userId}`)
@@ -84,6 +85,10 @@ export default function Weight() {
   };
 
   useEffect(() => { loadLogs(); }, []);
+
+  if (stored.role === "trainer") {
+    return <Navigate to="/" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

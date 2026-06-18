@@ -21,7 +21,8 @@ export default function Login() {
       localStorage.setItem("user", JSON.stringify({
         user_id: res.data.user_id,
         role: res.data.role,
-        name: res.data.name
+        name: res.data.name,
+        specialty: res.data.specialty
       }));
       navigate("/");
     } catch (err) {
