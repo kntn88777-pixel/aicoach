@@ -722,3 +722,72 @@
   margin-bottom: 3px;
   line-height: 1.5;
 }
+
+/* ===== Chat: meal table card ===== */
+
+.mk-meal-card {
+  max-width: 82%;
+  background: var(--mk-cream-card);
+  border: 1.5px solid var(--mk-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem;
+}
+
+.mk-meal-group {
+  margin-bottom: 1.1rem;
+}
+
+.mk-meal-group:last-child {
+  margin-bottom: 0;
+}
+
+.mk-meal-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--mk-forest);
+  margin: 0 0 8px;
+}
+
+.mk-meal-group-title i {
+  font-size: 14px;
+  color: var(--mk-leaf);
+}
+
+.mk-meal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.mk-meal-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--mk-text-muted);
+  padding: 6px 8px;
+  border-bottom: 1.5px solid var(--mk-border);
+  font-size: 11.5px;
+}
+
+.mk-meal-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--mk-border);
+  color: var(--mk-text);
+}
+
+.mk-meal-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mk-meal-table td.mk-meal-food {
+  font-weight: 500;
+}
+
+.mk-meal-table th:not(:first-child),
+.mk-meal-table td:not(:first-child) {
+  text-align: right;
+  color: var(--mk-text-muted);
+}

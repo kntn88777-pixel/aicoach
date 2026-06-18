@@ -39,6 +39,60 @@ function PlanCard({ data }) {
   );
 }
 
+function MealTableCard({ data }) {
+  const mealIcon = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes("sáng")) return "ti-sunrise";
+    if (n.includes("trưa")) return "ti-sun";
+    if (n.includes("tối") || n.includes("chiều")) return "ti-moon";
+    return "ti-bowl-chopsticks";
+  };
+
+  return (
+    <div className="mk-meal-card">
+      {data.intro && <p className="mk-plan-intro">{data.intro}</p>}
+      {(data.meals || []).map((meal, i) => (
+        <div key={i} className="mk-meal-group">
+          <p className="mk-meal-group-title">
+            <i className={`ti ${mealIcon(meal.name)}`} />
+            {meal.name}
+          </p>
+          <table className="mk-meal-table">
+            <thead>
+              <tr>
+                <th>Món</th>
+                <th>Calo</th>
+                <th>Protein</th>
+                <th>Carb</th>
+                <th>Fat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(meal.items || []).map((item, j) => (
+                <tr key={j}>
+                  <td className="mk-meal-food">{item.food}</td>
+                  <td>{item.calories}</td>
+                  <td>{item.protein}</td>
+                  <td>{item.carb}</td>
+                  <td>{item.fat}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+      {data.notes && data.notes.length > 0 && (
+        <div className="mk-plan-notes">
+          <p className="mk-plan-notes-title">Lưu ý</p>
+          <ul>
+            {data.notes.map((n, i) => <li key={i}>{n}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MessageContent({ msg }) {
   if (msg.role === "user") {
     return <div className="mk-bubble user">{msg.content}</div>;
@@ -49,6 +103,10 @@ function MessageContent({ msg }) {
 
   if (data.type === "plan") {
     return <PlanCard data={data} />;
+  }
+
+  if (data.type === "meal_table") {
+    return <MealTableCard data={data} />;
   }
 
   return <div className="mk-bubble assistant">{data.content}</div>;
