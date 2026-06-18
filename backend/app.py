@@ -48,6 +48,10 @@ class FoodRequest(BaseModel):
     food: str
     grams: float
 
+class WeightLogRequest(BaseModel):
+    user_id: int
+    weight: float
+
 def dict_factory(cursor, row):
     d = {}
     for idx, col in enumerate(cursor.description):
@@ -165,6 +169,38 @@ def dashboard(user_id: int):
         "recommended": round(recommended),
         "consumed": round(consumed),
         "remaining": round(recommended - consumed)
+    }
+
+@app.post("/weight-log")
+def add_weight_log(data: WeightLogRequest):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO weight_logs (user_id, weight)
+        VALUES (?, ?)
+    """, (data.user_id, data.weight))
+    cursor.execute("""
+        UPDATE users SET weight=? WHERE id=?
+    """, (data.weight, data.user_id))
+    conn.commit()
+    conn.close()
+    return {"message": "logged", "weight": data.weight}
+
+@app.get("/weight-log/{user_id}")
+def get_weight_log(user_id: int):
+    conn = get_connection()
+    conn.row_factory = dict_factory
+    cursor = conn.cursor()
+    rows = cursor.execute("""
+        SELECT weight, created_at FROM weight_logs
+        WHERE user_id=?
+        ORDER BY created_at ASC
+    """, (user_id,)).fetchall()
+    user = cursor.execute("SELECT goal_weight FROM users WHERE id=?", (user_id,)).fetchone()
+    conn.close()
+    return {
+        "logs": rows,
+        "goal_weight": user["goal_weight"] if user else None
     }
 
 app.include_router(chat_router)
