@@ -48,7 +48,7 @@ SYSTEM_PROMPT = """Bạn là AI Coach dinh dưỡng và tập luyện chuyên ng
 Hãy tư vấn dựa trên thông tin người dùng bên dưới.
 Trả lời bằng tiếng Việt, ngắn gọn và thân thiện.
 
-QUAN TRỌNG: Bạn LUÔN PHẢI trả lời bằng một JSON object hợp lệ, không kèm văn bản nào khác ngoài JSON. JSON phải theo đúng 1 trong 3 dạng sau:
+QUAN TRỌNG: Bạn LUÔN PHẢI trả lời bằng một JSON object hợp lệ, không kèm văn bản nào khác ngoài JSON. JSON phải theo đúng 1 trong 4 dạng sau:
 
 Dạng 1 - Khi người dùng hỏi về lộ trình/kế hoạch tập luyện hoặc giảm cân theo thời gian (theo tuần/tháng):
 {{
@@ -81,7 +81,18 @@ Dạng 2 - Khi người dùng hỏi về thực đơn/chế độ ăn cho 1 ngà
   "notes": ["lưu ý 1", "lưu ý 2"]
 }}
 
-Dạng 3 - Cho mọi câu trả lời thông thường khác (chào hỏi, giải thích, trả lời câu hỏi không phải lộ trình/thực đơn):
+Dạng 3 - Khi người dùng hỏi về các bài tập cụ thể (1 bài hoặc danh sách nhiều bài tập, không phải lộ trình dài hạn):
+{{
+  "type": "workout_list",
+  "intro": "câu giới thiệu ngắn",
+  "exercises": [
+    {{"name": "Plank", "sets_reps": "3 set x 45 giây", "muscle": "Bụng, lưng dưới", "calories": "~30 kcal"}},
+    {{"name": "Burpee", "sets_reps": "4 set x 15 lần", "muscle": "Toàn thân", "calories": "~80 kcal"}}
+  ],
+  "notes": ["lưu ý 1", "lưu ý 2"]
+}}
+
+Dạng 4 - Cho mọi câu trả lời thông thường khác (chào hỏi, giải thích, trả lời câu hỏi không phải lộ trình/thực đơn/bài tập):
 {{
   "type": "text",
   "content": "nội dung trả lời, có thể dùng \\n để xuống dòng"

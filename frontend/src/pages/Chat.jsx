@@ -93,6 +93,42 @@ function MealTableCard({ data }) {
   );
 }
 
+function WorkoutListCard({ data }) {
+  return (
+    <div className="mk-workout-card">
+      {data.intro && <p className="mk-plan-intro">{data.intro}</p>}
+      {(data.exercises || []).map((ex, i) => (
+        <div key={i} className="mk-workout-item">
+          <div className="mk-workout-icon">
+            <i className="ti ti-barbell" />
+          </div>
+          <div className="mk-workout-info">
+            <p className="mk-workout-name">{ex.name}</p>
+            <div className="mk-workout-meta">
+              {ex.sets_reps && <span><i className="ti ti-repeat" />{ex.sets_reps}</span>}
+              {ex.muscle && <span><i className="ti ti-anatomy" />{ex.muscle}</span>}
+            </div>
+          </div>
+          {ex.calories && (
+            <div className="mk-workout-calories">
+              <p className="mk-workout-calories-value">{ex.calories}</p>
+              <p className="mk-workout-calories-label">đốt cháy</p>
+            </div>
+          )}
+        </div>
+      ))}
+      {data.notes && data.notes.length > 0 && (
+        <div className="mk-plan-notes">
+          <p className="mk-plan-notes-title">Lưu ý</p>
+          <ul>
+            {data.notes.map((n, i) => <li key={i}>{n}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MessageContent({ msg }) {
   if (msg.role === "user") {
     return <div className="mk-bubble user">{msg.content}</div>;
@@ -107,6 +143,10 @@ function MessageContent({ msg }) {
 
   if (data.type === "meal_table") {
     return <MealTableCard data={data} />;
+  }
+
+  if (data.type === "workout_list") {
+    return <WorkoutListCard data={data} />;
   }
 
   return <div className="mk-bubble assistant">{data.content}</div>;

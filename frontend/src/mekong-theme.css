@@ -791,3 +791,91 @@
   text-align: right;
   color: var(--mk-text-muted);
 }
+
+/* ===== Chat: workout list card ===== */
+
+.mk-workout-card {
+  max-width: 82%;
+  background: var(--mk-cream-card);
+  border: 1.5px solid var(--mk-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem;
+}
+
+.mk-workout-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--mk-border);
+}
+
+.mk-workout-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.mk-workout-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--mk-leaf-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mk-workout-icon i {
+  font-size: 16px;
+  color: var(--mk-forest);
+}
+
+.mk-workout-info {
+  flex: 1;
+}
+
+.mk-workout-name {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--mk-text);
+  margin: 0 0 3px;
+}
+
+.mk-workout-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--mk-text-muted);
+}
+
+.mk-workout-meta span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mk-workout-meta i {
+  font-size: 13px;
+  color: var(--mk-leaf);
+}
+
+.mk-workout-calories {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.mk-workout-calories-value {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--mk-clay);
+  margin: 0;
+}
+
+.mk-workout-calories-label {
+  font-size: 10.5px;
+  color: var(--mk-text-muted);
+}
