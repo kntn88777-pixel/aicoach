@@ -6,6 +6,54 @@ import "../mekong-theme.css";
 
 const USER_ID = 1;
 
+function PlanCard({ data }) {
+  return (
+    <div className="mk-plan-card">
+      {data.intro && <p className="mk-plan-intro">{data.intro}</p>}
+      <div className="mk-timeline">
+        {(data.milestones || []).map((m, i) => (
+          <div key={i} className="mk-timeline-item">
+            <span className="mk-timeline-dot" />
+            <p className="mk-timeline-period">{m.period}</p>
+            {m.weight_target && (
+              <div className="mk-timeline-row"><i className="ti ti-scale" /><span>{m.weight_target}</span></div>
+            )}
+            {m.calories && (
+              <div className="mk-timeline-row"><i className="ti ti-flame" /><span>{m.calories}</span></div>
+            )}
+            {m.activity && (
+              <div className="mk-timeline-row"><i className="ti ti-run" /><span>{m.activity}</span></div>
+            )}
+          </div>
+        ))}
+      </div>
+      {data.notes && data.notes.length > 0 && (
+        <div className="mk-plan-notes">
+          <p className="mk-plan-notes-title">Lưu ý</p>
+          <ul>
+            {data.notes.map((n, i) => <li key={i}>{n}</li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MessageContent({ msg }) {
+  if (msg.role === "user") {
+    return <div className="mk-bubble user">{msg.content}</div>;
+  }
+
+  // msg.content can be a structured object ({type, ...}) or a plain string (legacy/fallback)
+  const data = typeof msg.content === "string" ? { type: "text", content: msg.content } : msg.content;
+
+  if (data.type === "plan") {
+    return <PlanCard data={data} />;
+  }
+
+  return <div className="mk-bubble assistant">{data.content}</div>;
+}
+
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -40,7 +88,7 @@ export default function Chat() {
       });
       setMessages(prev => [...prev, { role: "assistant", content: res.data.reply }]);
     } catch {
-      setMessages(prev => [...prev, { role: "assistant", content: "Lỗi kết nối, thử lại nhé!" }]);
+      setMessages(prev => [...prev, { role: "assistant", content: { type: "text", content: "Lỗi kết nối, thử lại nhé!" } }]);
     } finally {
       setLoading(false);
     }
@@ -81,9 +129,7 @@ export default function Chat() {
                   <Mascot size={28} />
                 </div>
               )}
-              <div className={`mk-bubble ${msg.role}`}>
-                {msg.content}
-              </div>
+              <MessageContent msg={msg} />
             </div>
           ))}
 

@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from database import get_connection
 from groq import Groq
 import os
+import json
+import re
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -42,6 +44,46 @@ def get_user_context(user_id):
 - Mục tiêu: {user['goal_weight']} kg, Giảm {user['goal_loss']} kg/tuần
 - Calo đã ăn hôm nay: {consumed['total'] or 0} kcal"""
 
+SYSTEM_PROMPT = """Bạn là AI Coach dinh dưỡng và tập luyện chuyên nghiệp.
+Hãy tư vấn dựa trên thông tin người dùng bên dưới.
+Trả lời bằng tiếng Việt, ngắn gọn và thân thiện.
+
+QUAN TRỌNG: Bạn LUÔN PHẢI trả lời bằng một JSON object hợp lệ, không kèm văn bản nào khác ngoài JSON. JSON phải theo đúng 1 trong 2 dạng sau:
+
+Dạng 1 - Khi người dùng hỏi về lộ trình/kế hoạch tập luyện hoặc giảm cân theo thời gian (theo tuần/tháng):
+{{
+  "type": "plan",
+  "intro": "câu giới thiệu ngắn",
+  "milestones": [
+    {{"period": "Tuần 1-4", "weight_target": "105kg → 97kg", "calories": "1500-1700 kcal", "activity": "Cardio 30-40 phút, 3-4 lần/tuần"}}
+  ],
+  "notes": ["lưu ý 1", "lưu ý 2"]
+}}
+
+Dạng 2 - Cho mọi câu trả lời thông thường khác (chào hỏi, giải thích, trả lời câu hỏi không phải lộ trình):
+{{
+  "type": "text",
+  "content": "nội dung trả lời, có thể dùng \\n để xuống dòng"
+}}
+
+Không thêm markdown ```json, không thêm giải thích ngoài JSON. Chỉ trả đúng JSON object.
+
+{context}"""
+
+def extract_json(raw):
+    raw = raw.strip()
+    raw = re.sub(r"^```json\s*|^```\s*|```$", "", raw, flags=re.MULTILINE).strip()
+    try:
+        return json.loads(raw)
+    except (json.JSONDecodeError, ValueError):
+        match = re.search(r"\{.*\}", raw, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group(0))
+            except (json.JSONDecodeError, ValueError):
+                pass
+    return {"type": "text", "content": raw}
+
 @router.post("/chat")
 def chat(req: ChatRequest):
     context = get_user_context(req.user_id)
@@ -64,25 +106,24 @@ def chat(req: ChatRequest):
     messages = [
         {
             "role": "system",
-            "content": f"""Bạn là AI Coach dinh dưỡng và tập luyện chuyên nghiệp.
-Hãy tư vấn dựa trên thông tin người dùng bên dưới.
-Trả lời bằng tiếng Việt, ngắn gọn và thân thiện.
-{context}"""
+            "content": SYSTEM_PROMPT.format(context=context)
         }
     ] + history + [{"role": "user", "content": req.message}]
 
     response = client.chat.completions.create(
         model="llama-3.3-70b-versatile",
         messages=messages,
-        max_tokens=1000
+        max_tokens=1500,
+        response_format={"type": "json_object"}
     )
 
-    reply = response.choices[0].message.content
+    raw_reply = response.choices[0].message.content
+    parsed = extract_json(raw_reply)
 
     save_chat(req.user_id, "user", req.message)
-    save_chat(req.user_id, "assistant", reply)
+    save_chat(req.user_id, "assistant", json.dumps(parsed, ensure_ascii=False))
 
-    return {"reply": reply}
+    return {"reply": parsed}
 
 @router.get("/chat-history/{user_id}")
 def get_chat_history(user_id: int):
@@ -94,4 +135,14 @@ def get_chat_history(user_id: int):
     """, (user_id,))
     rows = cursor.fetchall()
     conn.close()
-    return [dict(row) for row in rows]
+
+    result = []
+    for row in rows:
+        d = dict(row)
+        if d["role"] == "assistant":
+            try:
+                d["message"] = json.loads(d["message"])
+            except (json.JSONDecodeError, TypeError):
+                d["message"] = {"type": "text", "content": d["message"]}
+        result.append(d)
+    return result

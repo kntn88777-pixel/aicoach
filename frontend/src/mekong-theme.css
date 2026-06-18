@@ -632,3 +632,93 @@
   margin-bottom: 10px;
   color: var(--mk-leaf);
 }
+
+/* ===== Chat: structured plan card ===== */
+
+.mk-plan-card {
+  max-width: 78%;
+  background: var(--mk-cream-card);
+  border: 1.5px solid var(--mk-border);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem;
+}
+
+.mk-plan-intro {
+  font-size: 14px;
+  color: var(--mk-text);
+  margin: 0 0 1rem;
+  line-height: 1.5;
+}
+
+.mk-timeline {
+  position: relative;
+  padding-left: 22px;
+  border-left: 2.5px dashed var(--mk-leaf);
+}
+
+.mk-timeline-item {
+  position: relative;
+  padding-bottom: 1.1rem;
+}
+
+.mk-timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.mk-timeline-dot {
+  position: absolute;
+  left: -28px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--mk-forest);
+  border: 2px solid var(--mk-cream-card);
+}
+
+.mk-timeline-period {
+  font-family: "Fraunces", serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--mk-forest);
+  margin: 0 0 4px;
+}
+
+.mk-timeline-row {
+  display: flex;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--mk-text);
+  margin-bottom: 2px;
+}
+
+.mk-timeline-row i {
+  color: var(--mk-leaf);
+  font-size: 13px;
+  margin-top: 1px;
+}
+
+.mk-plan-notes {
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--mk-border);
+}
+
+.mk-plan-notes-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mk-clay);
+  margin: 0 0 6px;
+}
+
+.mk-plan-notes ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.mk-plan-notes li {
+  font-size: 12.5px;
+  color: var(--mk-text-muted);
+  margin-bottom: 3px;
+  line-height: 1.5;
+}
